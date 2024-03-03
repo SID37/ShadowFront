@@ -1,24 +1,26 @@
-Shader "Unlit/Skybox"
+Shader "PaintRenderer/Opaque"
 {
     HLSLINCLUDE
-    #include "Sky.hlsl"
+    #include "Opaque.hlsl"
     ENDHLSL
 
     Properties
     {
-        [MainColor]   _BaseColor   ("Color", Color) = (1,1,1,1)
         [MainTexture] _MainTexture ("Texture", 2D)  = "white" {}
     }
 
     SubShader
     {
-        ZWrite Off
+        ZWrite On
 
         Pass
         {
+            Name "PaintRendererOpaque"
+            Tags { "LightMode" = "PaintRendererOpaqueMode"}
+
             HLSLPROGRAM
                 #pragma vertex Vert
-                #pragma fragment frag
+                #pragma fragment Frag
             ENDHLSL
         }
     }
