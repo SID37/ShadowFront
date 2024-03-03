@@ -11,6 +11,7 @@ public class PainRenderer : ScriptableRendererFeature
     public Material skyMaterial;
 
     private OpaqueRenderPass opaqueRenderPass;
+    private GridRenderPass gridRenderPass;
     private SkyRenderPass skyRenderPass;
 
     private PaintRenderingContext paintContext;
@@ -23,19 +24,23 @@ public class PainRenderer : ScriptableRendererFeature
 
         paintContext = new PaintRenderingContext();
 
-        skyRenderPass = new SkyRenderPass(paintContext, skyMaterial);
-        skyRenderPass.renderPassEvent = RenderPassEvent.AfterRenderingSkybox;
-
         opaqueRenderPass = new OpaqueRenderPass(paintContext);
         opaqueRenderPass.renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+
+        gridRenderPass = new GridRenderPass(paintContext);
+        gridRenderPass.renderPassEvent = RenderPassEvent.BeforeRenderingSkybox;
+
+        skyRenderPass = new SkyRenderPass(paintContext, skyMaterial);
+        skyRenderPass.renderPassEvent = RenderPassEvent.AfterRenderingSkybox;
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         if (!enabled) return;
 
-        renderer.EnqueuePass(skyRenderPass);
         renderer.EnqueuePass(opaqueRenderPass);
+        renderer.EnqueuePass(gridRenderPass);
+        renderer.EnqueuePass(skyRenderPass);
     }
 
     public override void SetupRenderPasses(ScriptableRenderer renderer, in RenderingData renderingData)
@@ -43,14 +48,18 @@ public class PainRenderer : ScriptableRendererFeature
         if (!enabled) return;
 
         paintContext.Configure(renderingData);
-        skyRenderPass.ConfigureInput(0);
+
         opaqueRenderPass.ConfigureInput(0);
+        gridRenderPass.ConfigureInput(0);
+        skyRenderPass.ConfigureInput(0);
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (opaqueRenderPass != null) opaqueRenderPass.Dispose();
         if (skyRenderPass    != null) skyRenderPass.Dispose();
+        if (gridRenderPass   != null) gridRenderPass.Dispose();
+        if (opaqueRenderPass != null) opaqueRenderPass.Dispose();
+
         if (paintContext     != null) paintContext.Dispose();
     }
 }

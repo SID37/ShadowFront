@@ -3,19 +3,29 @@
 
 CBUFFER_START(UnityPerMaterial)
     float4 _BaseColor;
-    sampler2D _MainTexture;
+    TEXTURE2D(_MainTexture);
+    TEXTURE2D(_NoiseTexture);
 CBUFFER_END
 
-sampler2D _CameraDepthTexture;
+TEXTURE2D(_CameraDepthTexture);
+TEXTURE2D(_GridColorTexture);
 
 float2 _TextureOffset;
 float _ScreenScale;
 
 float4 frag (Varyings input) : SV_Target
 {
-    float depth = tex2D(_CameraDepthTexture, input.texcoord);
-    float4 blit = SAMPLE_TEXTURE2D(_BlitTexture, sampler_LinearClamp, input.texcoord);
-    float2 uv = input.texcoord;
-    float3 sky = tex2D(_MainTexture, float2(uv.x * _ScreenScale, uv.y) + _TextureOffset);
-    return float4(sky * (1.0 - blit.w) + blit.xyz * blit.w, 1);
+    float4 opaque = SAMPLE_TEXTURE2D(_BlitTexture,        sampler_PointClamp,  input.texcoord);
+    float4 grid   = SAMPLE_TEXTURE2D(_GridColorTexture,   sampler_PointClamp,  input.texcoord);
+    float3 noise  = SAMPLE_TEXTURE2D(_NoiseTexture,       sampler_PointRepeat, input.texcoord).xyz;
+
+    float2 uv = float2(input.texcoord.x * _ScreenScale, input.texcoord.y) + _TextureOffset;
+    float3 sky   = SAMPLE_TEXTURE2D(_MainTexture,  sampler_LinearRepeat, uv).xyz;
+
+    grid.w *= noise;
+
+    float3 result = sky;
+    result = result * (1.0 - grid.w)   + grid.xyz  * grid.w;
+    result = result * (1.0 - opaque.w) + opaque.xyz * opaque.w * sky;
+    return float4(result, 1);
 }

@@ -43,6 +43,7 @@ class SkyRenderPass : ScriptableRenderPass
         CommandBuffer cmd = CommandBufferPool.Get("Sky Renderer");
 
         CoreUtils.SetRenderTarget(cmd, cameraTargetHandle, paintContext.opaqueDepthTexture);
+        cmd.SetGlobalTexture(Shader.PropertyToID("_GridColorTexture"), paintContext.gridRenderTexture);
         Blitter.BlitTexture(cmd, paintContext.opaqueRenderTexture, viewportScale, material, 0);
 
         context.ExecuteCommandBuffer(cmd);
