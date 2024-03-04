@@ -49,5 +49,5 @@ float4 Frag(Varyings input): SV_Target
         k = d2 / c2;
     }
 
-    return float4(0, 0, 0, clamp(1 - k, 0, 1));
+    return float4(0, 0, 0, clamp(1 - k*k*k*k, 0, 1));
 }

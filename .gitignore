@@ -64,6 +64,9 @@ sysinfo.txt
 *.unitypackage
 *.app
 
+# Blender bakcup file
+*.blend1
+
 # Crashlytics generated file
 crashlytics-build.properties
 
