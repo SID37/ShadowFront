@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         body = GetComponent<Rigidbody>();
         cameraRotation = Vector3.left * Vector3.Dot(targetCamera.localRotation.eulerAngles, Vector3.left);
     }
