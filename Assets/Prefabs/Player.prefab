@@ -71,6 +71,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  cameraRotationMin: -40
+  cameraRotationMax: 40
   targetCamera: {fileID: 8087979914256861225}
 --- !u!54 &6417437789651453086
 Rigidbody:
@@ -215,7 +217,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
