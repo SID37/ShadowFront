@@ -20,7 +20,7 @@ float4 frag (Varyings input) : SV_Target
     float3 noise  = SAMPLE_TEXTURE2D(_NoiseTexture,       sampler_PointRepeat, input.texcoord).xyz;
 
     float2 uv = float2(input.texcoord.x * _ScreenScale, input.texcoord.y) + _TextureOffset;
-    float3 sky   = SAMPLE_TEXTURE2D(_MainTexture,  sampler_LinearRepeat, uv).xyz;
+    float3 sky   = SAMPLE_TEXTURE2D(_MainTexture, sampler_LinearRepeat, uv).xyz;
 
     grid.w *= noise;
 

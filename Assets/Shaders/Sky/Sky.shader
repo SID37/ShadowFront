@@ -1,4 +1,4 @@
-Shader "Unlit/Skybox"
+Shader "PaintRenderer/Sky"
 {
     HLSLINCLUDE
     #include "Sky.hlsl"
@@ -20,6 +20,8 @@ Shader "Unlit/Skybox"
 
         Pass
         {
+            Name "PaintSkyRenderer"
+
             HLSLPROGRAM
                 #pragma vertex Vert
                 #pragma fragment frag
