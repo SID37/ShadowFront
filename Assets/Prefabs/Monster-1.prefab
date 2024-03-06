@@ -95,6 +95,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Monster-1
       objectReference: {fileID: 0}
+    - target: {fileID: 4191835620081957720, guid: 9314fb7a61f48744a8cf82561dab64ac,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e614f4a29c8b0fc4b9612e52363a5142, type: 2}
     - target: {fileID: 6687826363394866338, guid: 9314fb7a61f48744a8cf82561dab64ac,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -104,9 +109,10 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 072606b2bf36e9f4ca4d39c92ebc125e, type: 2}
+      objectReference: {fileID: 2100000, guid: e614f4a29c8b0fc4b9612e52363a5142, type: 2}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -41764144672555267, guid: 9314fb7a61f48744a8cf82561dab64ac, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9314fb7a61f48744a8cf82561dab64ac,

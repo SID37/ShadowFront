@@ -26,6 +26,6 @@ float4 frag (Varyings input) : SV_Target
 
     float3 result = sky;
     result = result * (1.0 - grid.w)   + grid.xyz  * grid.w;
-    result = result * (1.0 - opaque.w) + opaque.xyz * opaque.w * sky;
+    result = result * (1.0 - opaque.w) + opaque.xyz * opaque.w;
     return float4(result, 1);
 }
