@@ -11,8 +11,8 @@ Shader "PaintRenderer/Grid"
 
     SubShader
     {
-        ZWrite On
-        ZTest  On
+        ZWrite Off
+        ZTest  Off
 
         Pass
         {

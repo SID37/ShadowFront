@@ -6,17 +6,15 @@ Shader "PaintRenderer/Sky"
 
     Properties
     {
-        [MainColor]
-        _BaseColor   ("Color", Color) = (1,1,1,1)
         [MainTexture]
         _MainTexture ("Texture", 2D)  = "white" {}
-
-        _NoiseTexture ("Texture", 2D)  = "white" {}
     }
 
     SubShader
     {
         ZWrite Off
+        ZTest Off
+        Cull Off
 
         Pass
         {

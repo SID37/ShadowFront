@@ -11,12 +11,13 @@ Shader "PaintRenderer/Opaque"
 
     SubShader
     {
-        ZWrite On
-
         Pass
         {
             Name "PaintRendererOpaque"
             Tags { "LightMode" = "PaintRendererOpaqueMode"}
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            ZTest Off
 
             HLSLPROGRAM
                 #pragma vertex Vert
