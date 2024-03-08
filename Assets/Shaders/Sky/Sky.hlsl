@@ -1,4 +1,5 @@
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+#include "../Common.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
 CBUFFER_START(UnityPerMaterial)

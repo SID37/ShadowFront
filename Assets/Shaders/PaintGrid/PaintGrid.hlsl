@@ -1,5 +1,4 @@
-#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/GlobalSamplers.hlsl"
+#include "../Common.hlsl"
 
 TEXTURE2D(_CameraDepthTexture);
 float4x4 _InvertViewProjectionMatrix;
