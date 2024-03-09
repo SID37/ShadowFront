@@ -10,6 +10,7 @@ Shader "PaintRenderer/Collider"
         {
             Name "PaintRendererColldier"
             Tags { "LightMode" = "PaintRendererColliderMode"}
+            Blend SrcAlpha OneMinusSrcAlpha
             ZWrite On
             ZTest On
 
