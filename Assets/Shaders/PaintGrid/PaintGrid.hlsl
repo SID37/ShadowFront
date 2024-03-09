@@ -33,27 +33,30 @@ Varyings Vert(Attributes input)
     return output;
 }
 
-float4 Frag(Varyings input): SV_Target
-{
-    float3 uv = input.uvCS;
-    uv = ComputeNormalizedDeviceCoordinatesWithZ(uv);
-    float depth = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_PointClamp, uv.xy).r;
-    float4 value = SAMPLE_TEXTURE2D(_MainTexture, sampler_LinearClamp, input.uv);
-    if (value.w == 0) discard;
+void Frag(Varyings input)
+{}
 
-    float k = 0;
+// float4 Frag(Varyings input): SV_Target
+// {
+//     float3 uv = input.uvCS;
+//     uv = ComputeNormalizedDeviceCoordinatesWithZ(uv);
+//     // float depth = SAMPLE_TEXTURE2D(_CameraDepthTexture, sampler_PointClamp, uv.xy).r;
+//     float4 value = SAMPLE_TEXTURE2D(_MainTexture, sampler_LinearClamp, input.uv);
+//     if (value.w == 0) discard;
 
-    if (depth > uv.z)
-    {
-        float3 powWS = ComputeWorldSpacePosition(uv.xy, uv.z,  _InvertViewProjectionMatrix);
-        float3 depWS = ComputeWorldSpacePosition(uv.xy, depth, _InvertViewProjectionMatrix);
-        float3 delta = powWS - depWS;
-        float d2 = dot(delta, delta);
-        float c2 = _CutDistance * _CutDistance;
-        if (depth > uv.z && d2 > c2)
-            discard;
-        k = d2 / c2;
-    }
+//     float k = 0;
 
-    return float4(value.xyz, value.w * clamp(1 - k*k*k*k, 0, 1));
-}
+//     // if (depth > uv.z)
+//     // {
+//     //     float3 powWS = ComputeWorldSpacePosition(uv.xy, uv.z,  _InvertViewProjectionMatrix);
+//     //     float3 depWS = ComputeWorldSpacePosition(uv.xy, depth, _InvertViewProjectionMatrix);
+//     //     float3 delta = powWS - depWS;
+//     //     float d2 = dot(delta, delta);
+//     //     float c2 = _CutDistance * _CutDistance;
+//     //     if (depth > uv.z && d2 > c2)
+//     //         discard;
+//     //     k = d2 / c2;
+//     // }
+
+//     return float4(value.xyz, value.w * clamp(1 - k*k*k*k, 0, 1));
+// }

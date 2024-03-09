@@ -43,10 +43,10 @@ public class PaintPipelineInstance : RenderPipeline
             }
 
             {
-                var sampleName = "Draw opaque models";
+                var sampleName = "Draw depth colliders";
                 cmd.BeginSample(sampleName);
 
-                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererOpaqueMode");
+                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererColliderMode");
                 var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
                 renderListDesc.renderQueueRange = RenderQueueRange.all;
 
@@ -61,6 +61,21 @@ public class PaintPipelineInstance : RenderPipeline
                 cmd.BeginSample(sampleName);
 
                 ShaderTagId shaderTagId = new ShaderTagId("PaintRendererGridMode");
+                var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
+                renderListDesc.renderQueueRange = RenderQueueRange.all;
+
+                cmd.SetGlobalTexture(Shader.PropertyToID("_CameraDepthTexture"), BuiltinRenderTextureType.CameraTarget);
+                var renderList = context.CreateRendererList(renderListDesc);
+                cmd.DrawRendererList(renderList);
+
+                cmd.EndSample(sampleName);
+            }
+
+            {
+                var sampleName = "Draw opaque models";
+                cmd.BeginSample(sampleName);
+
+                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererOpaqueMode");
                 var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
                 renderListDesc.renderQueueRange = RenderQueueRange.all;
 

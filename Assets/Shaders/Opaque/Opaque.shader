@@ -17,7 +17,7 @@ Shader "PaintRenderer/Opaque"
             Tags { "LightMode" = "PaintRendererOpaqueMode"}
             Blend SrcAlpha OneMinusSrcAlpha
             ZWrite Off
-            ZTest Off
+            ZTest On
 
             HLSLPROGRAM
                 #pragma vertex Vert
