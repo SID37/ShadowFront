@@ -57,21 +57,6 @@ public class PaintPipelineInstance : RenderPipeline
             }
 
             {
-                var sampleName = "Draw grid meshes";
-                cmd.BeginSample(sampleName);
-
-                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererGridMode");
-                var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
-                renderListDesc.renderQueueRange = RenderQueueRange.all;
-
-                cmd.SetGlobalTexture(Shader.PropertyToID("_CameraDepthTexture"), BuiltinRenderTextureType.CameraTarget);
-                var renderList = context.CreateRendererList(renderListDesc);
-                cmd.DrawRendererList(renderList);
-
-                cmd.EndSample(sampleName);
-            }
-
-            {
                 var sampleName = "Draw opaque models";
                 cmd.BeginSample(sampleName);
 
