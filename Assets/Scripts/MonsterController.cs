@@ -12,6 +12,9 @@ public class MonsterController : MonoBehaviour
     public NavMeshAgent agent;
     public Transform player;
     public float updateRate = 0.1f;
+    public AudioSource audioSource;
+    public AudioClip runClip;
+    public GameObject killObject;
 
     Collider monsterCollider;
     float updateTime;
@@ -63,8 +66,12 @@ public class MonsterController : MonoBehaviour
     {
         updateTime = Time.time + updateRate;
 
-        if (state != State.Death)
-            anim["Run"].normalizedTime = Random.Range(0.0f, 1.0f);
+        if (state != State.Death) {
+            // anim["Run"].normalizedTime = Random.Range(0.0f, 1.0f);
+            anim["Run"].normalizedTime += state == State.Run ? 0.4f : 0.2f;
+            if (anim["Run"].normalizedTime > 1)
+                anim["Run"].normalizedTime -= 1;
+        }
         else
         {
             var asd = anim.Play("Lie");
@@ -83,8 +90,16 @@ public class MonsterController : MonoBehaviour
             case State.Run:   state = State.Death; break;
             case State.Death: state = State.Death; break;
         }
+
+        if (state == State.Run) {
+            audioSource.clip = runClip;
+            audioSource.Play();
+        }
+
         if (state == State.Death) {
+            Destroy(killObject.gameObject, 30);
             monsterCollider.enabled = false;
+            audioSource.Stop();
         }
         UpdateState();
     }

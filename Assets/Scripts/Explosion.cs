@@ -7,6 +7,7 @@ using UnityEngine;
 public class Explosion : MonoBehaviour
 {
     public float ttl = 0.2f;
+    public GameObject killObject;
     Material material;
     float startTime;
 
@@ -23,6 +24,6 @@ public class Explosion : MonoBehaviour
         material.SetInteger(Shader.PropertyToID("_UVLayer"), (int)((dt / ttl) * (uvCount + 1)));
 
         if (dt > ttl)
-            Destroy(gameObject);
+            Destroy(killObject.gameObject);
     }
 }
