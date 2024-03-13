@@ -1,77 +1,40 @@
-using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.RendererUtils;
 
 public class PaintPipelineInstance : RenderPipeline
 {
-    Material skyMaterial = null;
+    Material skyMaterial;
 
     public PaintPipelineInstance (Material skyMaterial) {
         this.skyMaterial = skyMaterial;
     }
 
-    protected override void Render(ScriptableRenderContext context, Camera[] cameras) {
+    protected override void Render(ScriptableRenderContext context, Camera[] cameras)
+    {
         foreach (Camera camera in cameras)
         {
-            var cmd = new CommandBuffer() { name = "Paint Rendering" };
-
-            camera.TryGetCullingParameters(out var cullingParameters);
-            var cullingResults = context.Cull(ref cullingParameters);
-            context.SetupCameraProperties(camera);
-
+            using (var paint = new PaintRenderContext(context, camera))
             {
-                var sampleName = "Clear render target";
-                cmd.BeginSample(sampleName);
-                cmd.ClearRenderTarget(true, true, Color.yellow);
-                cmd.EndSample(sampleName);
+                using (paint.NewSample("Clear render target"))
+                    paint.cmd.ClearRenderTarget(true, true, Color.yellow);
+
+                using (paint.NewSample("Draw sky background"))
+                {
+                    float hFieldOfView = 60; // camera.fieldOfView
+                    float wFieldOfView = 90; // ~= 90 for 16/9
+                    float screenScale  = camera.pixelWidth / (float) camera.pixelHeight;
+                    var angles = camera.transform.eulerAngles;
+                    skyMaterial.SetVector(Shader.PropertyToID("_TextureOffset"), new Vector2(angles.y / wFieldOfView, -angles.x / hFieldOfView));
+                    skyMaterial.SetFloat(Shader.PropertyToID("_ScreenScale"), screenScale);
+                    paint.Blit(skyMaterial);
+                }
+
+                using (paint.NewSample("Draw depth colliders"))
+                    paint.DrawByShaderTag(new ShaderTagId("PaintRendererColliderMode"));
+
+                using (paint.NewSample("Draw opaque models"))
+                    paint.DrawByShaderTag(new ShaderTagId("PaintRendererOpaqueMode"));
             }
-
-            {
-                var sampleName = "Draw sky background";
-                cmd.BeginSample(sampleName);
-
-                float hFieldOfView = 60; // camera.fieldOfView
-                float wFieldOfView = 90; // ~= 90 for 16/9
-                float screenScale  = camera.pixelWidth / (float) camera.pixelHeight;
-                var angles = camera.transform.eulerAngles;
-                skyMaterial.SetVector(Shader.PropertyToID("_TextureOffset"), new Vector2(angles.y / wFieldOfView, -angles.x / hFieldOfView));
-                skyMaterial.SetFloat(Shader.PropertyToID("_ScreenScale"), screenScale);
-                Blitter.BlitTexture(cmd, new Vector4(1, 1, 0, 0), skyMaterial, 0);
-
-                cmd.EndSample(sampleName);
-            }
-
-            {
-                var sampleName = "Draw depth colliders";
-                cmd.BeginSample(sampleName);
-
-                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererColliderMode");
-                var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
-                renderListDesc.renderQueueRange = RenderQueueRange.all;
-
-                var renderList = context.CreateRendererList(renderListDesc);
-                cmd.DrawRendererList(renderList);
-
-                cmd.EndSample(sampleName);
-            }
-
-            {
-                var sampleName = "Draw opaque models";
-                cmd.BeginSample(sampleName);
-
-                ShaderTagId shaderTagId = new ShaderTagId("PaintRendererOpaqueMode");
-                var renderListDesc = new RendererListDesc(shaderTagId, cullingResults, camera);
-                renderListDesc.renderQueueRange = RenderQueueRange.all;
-
-                var renderList = context.CreateRendererList(renderListDesc);
-                cmd.DrawRendererList(renderList);
-
-                cmd.EndSample(sampleName);
-            }
-
-            context.ExecuteCommandBuffer(cmd);
-            cmd.Release();
             context.Submit();
         }
     }
