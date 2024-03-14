@@ -23,12 +23,14 @@ public class PlayerController : MonoBehaviour
     public AudioSource hitSound;
     public RawImage hitLeft;
     public RawImage hitRight;
+    public RectTransform deadScreen;
     public float hitDelay = 0.5f;
     public int Hp = 5;
 
     private Rigidbody body;
     private Vector3 cameraRotation;
     private float lastHit;
+    private float endGameTimer = 0;
 
     void Start()
     {
@@ -42,6 +44,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Hp <= 0) {
+            gun.amplitude = 0;
+            endGameTimer += Time.deltaTime * 0.3f;
+            deadScreen.anchoredPosition = new Vector2(0, 0);
+            if (endGameTimer >= 1)
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            return;
+        }
         float addHitColor = -Time.deltaTime * 0.1f;
         AddHitColor(addHitColor, addHitColor);
 
@@ -76,6 +86,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (Hp <= 0) return;
         var vertical = Input.GetAxis("Vertical");
         var horizontal = Input.GetAxis("Horizontal");
 
@@ -103,7 +114,7 @@ public class PlayerController : MonoBehaviour
         fireSound.Play();
 
         RaycastHit hit;
-        if (Physics.Raycast(position, direction, out hit, Mathf.Infinity))
+        if (Physics.Raycast(position, direction, out hit, Mathf.Infinity, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             Instantiate(explosion, hit.point, Quaternion.LookRotation(-direction));
             if (hit.collider != null)
@@ -116,6 +127,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionStay(Collision collision)
     {
+        if (Hp <= 0) return;
         if (lastHit + hitDelay < Time.time)
         {
             if (collision.collider.GetComponent<MonsterController>() != null)
@@ -127,10 +139,6 @@ public class PlayerController : MonoBehaviour
                 var targetVector = targetCamera.transform.InverseTransformDirection(collision.collider.transform.position - transform.position).normalized;
                 float k = Vector3.Dot(Vector3.left, targetVector) * 0.5f;
                 AddHitColor((0.5f + k) * 0.1f, (0.5f - k) * 0.1f);
-
-                if (Hp <= 0) {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-                }
             }
         }
     }

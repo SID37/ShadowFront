@@ -8,6 +8,9 @@ Shader "PaintRenderer/UISprite"
     {
         [PerRendererData]
         _MainTex ("Sprite Texture", 2D) = "white" { }
+        _Color ("Tint", Color) = (1.000000,1.000000,1.000000,1.000000)
+        [HideInInspector]
+        _RendererColor ("RendererColor", Color) = (1.000000,1.000000,1.000000,1.000000)
     }
 
     SubShader

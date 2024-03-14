@@ -271,6 +271,7 @@ MonoBehaviour:
   audioSource: {fileID: 1989737241323046741}
   runClip: {fileID: 8300000, guid: cdac8ad9416883b45a618fe2a80e5859, type: 3}
   killObject: {fileID: 7412098453671216908}
+  playerTriggerDistance: 20
 --- !u!136 &7837449886315958431
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -459,6 +460,7 @@ Animation:
   serializedVersion: 3
   m_Animation: {fileID: 0}
   m_Animations:
+  - {fileID: -4902929072500572550, guid: 9314fb7a61f48744a8cf82561dab64ac, type: 3}
   - {fileID: 3462307215145699393, guid: 9314fb7a61f48744a8cf82561dab64ac, type: 3}
   - {fileID: -2209639088509119262, guid: 9314fb7a61f48744a8cf82561dab64ac, type: 3}
   m_WrapMode: 0

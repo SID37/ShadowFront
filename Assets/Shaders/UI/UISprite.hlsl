@@ -3,6 +3,8 @@
 
 CBUFFER_START(UnityPerMaterial)
     sampler2D _MainTex;
+    float4 _RendererColor;
+    float4 _Color;
 CBUFFER_END
 
 
@@ -29,5 +31,5 @@ Varyings Vert(Attributes input)
 float4 Frag(Varyings input): SV_Target
 {
     float4 customColor = tex2D(_MainTex, input.uv);
-    return customColor;
+    return customColor * _RendererColor * _Color;
 }
